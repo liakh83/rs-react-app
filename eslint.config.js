@@ -21,7 +21,7 @@ export default tseslint.config([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
-      linterOptions: {
+    linterOptions: {
       noInlineConfig: true,
       reportUnusedInlineConfigs: 'error',
     },
@@ -39,7 +39,7 @@ export default tseslint.config([
       ],
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
-      "no-empty": "warn" ,
+      'no-empty': 'warn',
       'react-compiler/react-compiler': 'error',
       'prettier/prettier': 'error',
       'no-console': 'warn',
