@@ -1,5 +1,9 @@
 import { Component, type ReactNode } from 'react';
-import { fetchPokemonList } from '../api/pokemonApi';
+import { fetchPokemonList, fetchPokemonByName } from '../api/pokemonApi';
+
+interface Props {
+  searchTerm: string;
+}
 
 interface State {
   pokemonItems: { name: string; url: string }[];
@@ -7,18 +11,37 @@ interface State {
   error: string | null;
 }
 
-export default class CardList extends Component<object, State> {
+export default class CardList extends Component<Props, State> {
   state: State = {
     pokemonItems: [],
     isLoading: true,
     error: null,
   };
 
-  componentDidMount = async () => {
+  componentDidMount(): void {
+    this.loadData();
+  }
+
+  componentDidUpdate(prevProps: Props): void {
+    if (prevProps.searchTerm !== this.props.searchTerm) {
+      this.loadData();
+    }
+  }
+
+  loadData = async () => {
+    this.setState({ isLoading: true, error: null });
     try {
-      const data = await fetchPokemonList();
+      const { searchTerm } = this.props;
+      let result;
+      if (searchTerm === '') {
+        const data = await fetchPokemonList();
+        result = data.results;
+      } else {
+        const data = await fetchPokemonByName(searchTerm);
+        result = [{ name: data.name, url: data.species.url }];
+      }
       this.setState({
-        pokemonItems: data.results,
+        pokemonItems: result,
         isLoading: false,
       });
     } catch (error: unknown) {
