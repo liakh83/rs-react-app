@@ -42,9 +42,11 @@ export default class CardList extends Component<Props, State> {
     }
   }
 
+  delay = (ms: number) => new Promise((result) => setTimeout(result, ms));
+
   async loadAllPokemons() {
     this.setState({ isLoading: true, error: null });
-
+    await this.delay(500);
     try {
       const list = await fetchPokemonList();
       const detailed = await Promise.all(
@@ -64,6 +66,7 @@ export default class CardList extends Component<Props, State> {
 
   async loadSinglePokemon(name: string) {
     this.setState({ isLoading: true, error: null });
+    await this.delay(500);
     try {
       const single = await fetchPokemonByName(name);
       this.setState({ pokemonItems: [single], isLoading: false });
@@ -78,9 +81,16 @@ export default class CardList extends Component<Props, State> {
 
   render(): ReactNode {
     const { pokemonItems, isLoading, error } = this.state;
+
     if (isLoading) {
-      return <div>Loading... </div>;
+      return (
+        <div className="flex justify-center items-center p-10 gap-2">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <div>Loading... </div>
+        </div>
+      );
     }
+
     if (error) {
       return <div className="text-red-500">Error: {error}</div>;
     }
