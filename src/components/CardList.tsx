@@ -29,7 +29,11 @@ export default class CardList extends Component<Props, State> {
   };
 
   componentDidMount(): void {
-    this.loadAllPokemons();
+    if (this.props.searchTerm === '') {
+      this.loadAllPokemons();
+    } else {
+      this.loadSinglePokemon(this.props.searchTerm);
+    }
   }
 
   componentDidUpdate(prevProps: Props): void {

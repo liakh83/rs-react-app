@@ -9,6 +9,7 @@ interface Props {
 export default class Header extends Component<Props> {
   render(): ReactNode {
     const { inputValue, onSearchInput, onSearchClick } = this.props;
+
     return (
       <header className="flex items-center justify-center gap-4 p-4">
         <input

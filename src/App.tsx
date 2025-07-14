@@ -18,6 +18,7 @@ export default class App extends Component<object, State> {
 
   handleSearchInput = (value: string) => {
     this.setState({ inputValue: value });
+    localStorage.setItem('inputValue', value);
   };
 
   handleSearch = () => {
