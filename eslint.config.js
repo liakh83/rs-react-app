@@ -42,7 +42,7 @@ export default tseslint.config([
       'no-empty': 'warn',
       'react-compiler/react-compiler': 'error',
       'prettier/prettier': 'error',
-      'no-console': 'warn',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
       '@typescript-eslint/no-explicit-any': 'error',
     },
     settings: {

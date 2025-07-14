@@ -6,12 +6,14 @@ import './App.css';
 interface State {
   inputValue: string;
   searchTerm: string;
+  shouldThrow: boolean;
 }
 
 export default class App extends Component<object, State> {
   state: State = {
     inputValue: localStorage.getItem('inputValue') || '',
     searchTerm: localStorage.getItem('searchTerm') || '',
+    shouldThrow: false,
   };
 
   handleSearchInput = (value: string) => {
@@ -24,8 +26,17 @@ export default class App extends Component<object, State> {
     this.setState({ searchTerm: trimmed });
   };
 
+  handleError = () => {
+    this.setState({ shouldThrow: true });
+  };
+
   render(): ReactNode {
-    const { inputValue, searchTerm } = this.state;
+    const { inputValue, searchTerm, shouldThrow } = this.state;
+
+    if (shouldThrow) {
+      throw new Error('Artificial error for testing the ErrorBoundary!');
+    }
+
     return (
       <>
         <Header
@@ -35,7 +46,13 @@ export default class App extends Component<object, State> {
         />
         <div className="card">
           <CardList searchTerm={searchTerm} />
-          <button onClick={() => {}}>Error Button</button>
+          <button
+            onClick={() => {
+              this.handleError();
+            }}
+          >
+            Error Button
+          </button>
         </div>
       </>
     );
