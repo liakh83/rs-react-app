@@ -1,12 +1,22 @@
 import { Component, type ReactNode } from 'react';
 import { fetchPokemonList, fetchPokemonByName } from '../api/pokemonApi';
 
+interface Pokemon {
+  id: number;
+  name: string;
+  image: string;
+  types: string[];
+  abilities: string[];
+  height: number;
+  weight: number;
+}
+
 interface Props {
   searchTerm: string;
 }
 
 interface State {
-  pokemonItems: { name: string; url: string }[];
+  pokemonItems: Pokemon[];
   isLoading: boolean;
   error: string | null;
 }
@@ -19,31 +29,30 @@ export default class CardList extends Component<Props, State> {
   };
 
   componentDidMount(): void {
-    this.loadData();
+    this.loadAllPokemons();
   }
 
   componentDidUpdate(prevProps: Props): void {
     if (prevProps.searchTerm !== this.props.searchTerm) {
-      this.loadData();
+      if (this.props.searchTerm === '') {
+        this.loadAllPokemons();
+      } else {
+        this.loadSinglePokemon(this.props.searchTerm);
+      }
     }
   }
 
-  loadData = async () => {
+  async loadAllPokemons() {
     this.setState({ isLoading: true, error: null });
+
     try {
-      const { searchTerm } = this.props;
-      let result;
-      if (searchTerm === '') {
-        const data = await fetchPokemonList();
-        result = data.results;
-      } else {
-        const data = await fetchPokemonByName(searchTerm);
-        result = [{ name: data.name, url: data.species.url }];
-      }
-      this.setState({
-        pokemonItems: result,
-        isLoading: false,
-      });
+      const list = await fetchPokemonList();
+      const detailed = await Promise.all(
+        list.results.map((item: { name: string }) =>
+          fetchPokemonByName(item.name)
+        )
+      );
+      this.setState({ pokemonItems: detailed, isLoading: false });
     } catch (error: unknown) {
       if (error instanceof Error) {
         this.setState({ isLoading: false, error: error.message || 'Error' });
@@ -51,11 +60,24 @@ export default class CardList extends Component<Props, State> {
         this.setState({ isLoading: false, error: 'Unknown error' });
       }
     }
-  };
+  }
+
+  async loadSinglePokemon(name: string) {
+    this.setState({ isLoading: true, error: null });
+    try {
+      const single = await fetchPokemonByName(name);
+      this.setState({ pokemonItems: [single], isLoading: false });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        this.setState({ isLoading: false, error: error.message || 'Error' });
+      } else {
+        this.setState({ isLoading: false, error: 'Unknown error' });
+      }
+    }
+  }
 
   render(): ReactNode {
     const { pokemonItems, isLoading, error } = this.state;
-
     if (isLoading) {
       return <div>Loading... </div>;
     }
@@ -64,14 +86,35 @@ export default class CardList extends Component<Props, State> {
     }
 
     return (
-      <ul className="gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {pokemonItems.map((pokemon) => (
-          <li key={pokemon.name} className="flex gap-2">
-            <p>{pokemon.name}</p>
-            <p>{pokemon.url}</p>
-          </li>
+          <div
+            key={pokemon.id}
+            className="border rounded shadow p-4 bg-white hover:shadow-lg transition"
+          >
+            <h2 className="text-lg font-bold capitalize mb-2">
+              {pokemon.name}
+            </h2>
+            <img
+              src={pokemon.image}
+              alt={pokemon.name}
+              className="w-24 h-24 mx-auto mb-2"
+            />
+            <p>
+              <strong>Types:</strong> {pokemon.types.join(', ')}
+            </p>
+            <p>
+              <strong>Abilities:</strong> {pokemon.abilities.join(', ')}
+            </p>
+            <p>
+              <strong>Height:</strong> {pokemon.height} m
+            </p>
+            <p>
+              <strong>Weight:</strong> {pokemon.weight} kg
+            </p>
+          </div>
         ))}
-      </ul>
+      </div>
     );
   }
 }
