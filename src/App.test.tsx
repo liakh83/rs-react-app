@@ -87,6 +87,10 @@ describe('App Component', () => {
   });
 
   it('renders fallback UI on error', async () => {
+    const consoleErrorMock = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
     render(
       <ErrorBoundary>
         <App />
@@ -101,5 +105,6 @@ describe('App Component', () => {
         /Artificial error for testing the ErrorBoundary!/i
       )
     ).toBeInTheDocument();
+    consoleErrorMock.mockRestore();
   });
 });
