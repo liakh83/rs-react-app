@@ -46,11 +46,8 @@ export default class CardList extends Component<Props, State> {
     }
   }
 
-  delay = (ms: number) => new Promise((result) => setTimeout(result, ms));
-
   async loadAllPokemons() {
     this.setState({ isLoading: true, error: null });
-    await this.delay(500);
     try {
       const list = await fetchPokemonList();
       const detailed = await Promise.all(
@@ -70,7 +67,6 @@ export default class CardList extends Component<Props, State> {
 
   async loadSinglePokemon(name: string) {
     this.setState({ isLoading: true, error: null });
-    await this.delay(500);
     try {
       const single = await fetchPokemonByName(name);
       this.setState({ pokemonItems: [single], isLoading: false });
@@ -97,6 +93,10 @@ export default class CardList extends Component<Props, State> {
 
     if (error) {
       return <div className="text-red-500">Error: {error}</div>;
+    }
+
+    if (!isLoading && !error && pokemonItems.length === 0) {
+      return <div className="text-red-500">No results found</div>;
     }
 
     return (
