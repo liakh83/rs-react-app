@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
+      '@api': path.resolve(__dirname, 'src/api'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@test-utils': path.resolve(__dirname, 'src/test-utils'),
     },
@@ -24,6 +25,7 @@ export default defineConfig({
         'src/**/*.test.{ts,tsx}',
         'src/**/*.spec.{js,jsx,ts,tsx}',
         'src/index.{js,jsx,ts,tsx}',
+        'src/main.tsx',
         'src/test/setup.ts',
         'src/**/*.d.ts',
       ],
