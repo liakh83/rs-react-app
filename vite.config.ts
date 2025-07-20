@@ -1,10 +1,17 @@
 /// <reference types="vitest"/>
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@test-utils': path.resolve(__dirname, 'src/test-utils'),
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
@@ -14,10 +21,10 @@ export default defineConfig({
       reporter: ['text', 'html'],
       include: ['src/**/*.{js,jsx,ts,tsx}'],
       exclude: [
-        'src/**/*.test.{js,jsx,ts,tsx}',
+        'src/**/*.test.{ts,tsx}',
         'src/**/*.spec.{js,jsx,ts,tsx}',
         'src/index.{js,jsx,ts,tsx}',
-        'src/setupTests.{js,ts}',
+        'src/test/setup.ts',
         'src/**/*.d.ts',
       ],
       thresholds: {
