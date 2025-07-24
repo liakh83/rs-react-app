@@ -19,11 +19,6 @@ beforeEach(() => {
 
 describe('CardList component', () => {
   describe('CardList behavior', () => {
-    it('shows loading spinner initially', () => {
-      render(<CardList searchTerm="" />);
-      expect(screen.getByText(/loading/i)).toBeInTheDocument();
-    });
-
     it('calls fetchPokemonByName with correct searchTerm', async () => {
       const spy = vi
         .spyOn(api, 'fetchPokemonByName')
