@@ -1,7 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import CardList from './CardList';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import * as api from '@api/pokemonApi';
+
+import CardList from './CardList';
 
 const mockPokemon = {
   id: 1,

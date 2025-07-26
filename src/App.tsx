@@ -1,61 +1,51 @@
-import { Component, type ReactNode } from 'react';
-import Header from './components/Header';
-import CardList from './components/CardList';
+import { useState } from 'react';
+
+import CardList from '@components/CardList';
+import Header from '@components/Header';
+import { useLocalStorageState } from '@hooks/index';
 import './App.css';
 
-interface State {
-  inputValue: string;
-  searchTerm: string;
-  shouldThrow: boolean;
-}
+const App = () => {
+  const [inputValue, setInputValue] = useLocalStorageState('inputValue', '');
+  const [searchTerm, setSearchTerm] = useLocalStorageState('searchTerm', '');
+  const [shouldThrow, setShouldThrow] = useState(false);
 
-export default class App extends Component<object, State> {
-  state: State = {
-    inputValue: localStorage.getItem('inputValue') || '',
-    searchTerm: localStorage.getItem('searchTerm') || '',
-    shouldThrow: false,
+  const handleSearchInput = (value: string) => {
+    setInputValue(value);
   };
 
-  handleSearchInput = (value: string) => {
-    this.setState({ inputValue: value });
-    localStorage.setItem('inputValue', value);
+  const handleSearch = () => {
+    const trimmedValue = inputValue.trim();
+    setSearchTerm(trimmedValue);
   };
 
-  handleSearch = () => {
-    const trimmed = this.state.inputValue.trim();
-    localStorage.setItem('searchTerm', trimmed);
-    this.setState({ searchTerm: trimmed });
+  const handleError = () => {
+    setShouldThrow(true);
   };
 
-  handleError = () => {
-    this.setState({ shouldThrow: true });
-  };
-
-  render(): ReactNode {
-    const { inputValue, searchTerm, shouldThrow } = this.state;
-
-    if (shouldThrow) {
-      throw new Error('Artificial error for testing the ErrorBoundary!');
-    }
-
-    return (
-      <>
-        <Header
-          inputValue={inputValue}
-          onSearchInput={this.handleSearchInput}
-          onSearchClick={this.handleSearch}
-        />
-        <div className="card">
-          <CardList searchTerm={searchTerm} />
-          <button
-            onClick={() => {
-              this.handleError();
-            }}
-          >
-            Error Button
-          </button>
-        </div>
-      </>
-    );
+  if (shouldThrow) {
+    throw new Error('Artificial error for testing the ErrorBoundary!');
   }
-}
+
+  return (
+    <>
+      <Header
+        inputValue={inputValue}
+        onSearchInput={handleSearchInput}
+        onSearchClick={handleSearch}
+      />
+      <div className="card">
+        <CardList searchTerm={searchTerm} />
+        <button
+          onClick={() => {
+            handleError();
+          }}
+        >
+          Error Button
+        </button>
+      </div>
+    </>
+  );
+};
+
+export default App;

@@ -7,9 +7,10 @@ import tseslint from 'typescript-eslint';
 import reactCompiler from 'eslint-plugin-react-compiler';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import { globalIgnores } from 'eslint/config';
+import eslintPluginImport from 'eslint-plugin-import';
 
 export default tseslint.config([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'coverage/**/*']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -30,6 +31,7 @@ export default tseslint.config([
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       'react-compiler': reactCompiler,
+      import: eslintPluginImport,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -44,10 +46,53 @@ export default tseslint.config([
       'prettier/prettier': 'error',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       '@typescript-eslint/no-explicit-any': 'error',
+      'eol-last': ['error', 'always'],
+      // import
+      'import/extensions': ['error', { ts: 'never', tsx: 'never' }],
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+      'import/no-cycle': ['error', { maxDepth: Infinity }],
+      'import/first': 'error',
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+            'object',
+            'type',
+          ],
+          pathGroups: [
+            {
+              pattern: '@/**',
+              group: 'internal',
+              position: 'after',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['builtin'],
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+          'newlines-between': 'always',
+        },
+      ],
     },
     settings: {
       react: {
         version: 'detect',
+      },
+       'import/parsers': {
+        '@typescript-eslint/parser': ['.ts', '.tsx'],
+      },
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: ['./tsconfig.app.json'],
+        },
       },
     },
   },

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+
 import { fetchPokemonList, fetchPokemonByName } from '@api/pokemonApi';
 import Loader from '@components/Loader';
-import type { Pokemon } from '@utils/interfaces';
 import PokemonCard from '@components/PokemonCard';
+
+import type { Pokemon } from '@utils/interfaces';
 
 interface Props {
   searchTerm: string;
