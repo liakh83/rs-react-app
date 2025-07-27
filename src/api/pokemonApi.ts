@@ -3,8 +3,11 @@ import type {
   PokemonListResponse,
 } from '@utils/interfaces';
 
-export const fetchPokemonList = async (): Promise<PokemonListResponse> => {
-  const URL = `https://pokeapi.co/api/v2/pokemon?offset=${0}&limit=${30}`;
+export const fetchPokemonList = async (
+  offset: number,
+  limit = 30
+): Promise<PokemonListResponse> => {
+  const URL = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`;
   const result = await fetch(URL);
   if (!result.ok) throw new Error(`Error status: ${result.status}`);
   return result.json();

@@ -1,6 +1,6 @@
 import type { Pokemon } from '@utils/interfaces';
 
-interface Props {
+export interface Props {
   pokemon: Pokemon;
   onClick?: (pokemon: Pokemon) => void;
 }

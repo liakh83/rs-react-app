@@ -4,6 +4,15 @@ import { describe, it, expect, vi } from 'vitest';
 
 import Header from './Header';
 
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 describe('Search component tests', () => {
   it('renders search input and search button', () => {
     render(
