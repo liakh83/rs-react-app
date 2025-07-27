@@ -85,7 +85,7 @@ export default tseslint.config([
       react: {
         version: 'detect',
       },
-       'import/parsers': {
+      'import/parsers': {
         '@typescript-eslint/parser': ['.ts', '.tsx'],
       },
       'import/resolver': {

@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 interface Props {
   inputValue: string;
   onSearchInput: (value: string) => void;
@@ -5,6 +7,12 @@ interface Props {
 }
 
 const Header = ({ inputValue, onSearchInput, onSearchClick }: Props) => {
+  const navigate = useNavigate();
+
+  const handleGoToAbout = () => {
+    navigate('/about');
+  };
+
   return (
     <header className="flex items-center justify-center gap-4 p-4">
       <input
@@ -17,6 +25,7 @@ const Header = ({ inputValue, onSearchInput, onSearchClick }: Props) => {
       <button onClick={onSearchClick} aria-label="Search for Pokemon">
         search
       </button>
+      <button onClick={handleGoToAbout}>About</button>
     </header>
   );
 };
