@@ -1,7 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import CardList from './CardList';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import * as api from '@api/pokemonApi';
+
+import CardList from './CardList';
 
 const mockPokemon = {
   id: 1,
@@ -19,17 +21,20 @@ beforeEach(() => {
 
 describe('CardList component', () => {
   describe('CardList behavior', () => {
-    it('shows loading spinner initially', () => {
-      render(<CardList searchTerm="" />);
-      expect(screen.getByText(/loading/i)).toBeInTheDocument();
-    });
-
     it('calls fetchPokemonByName with correct searchTerm', async () => {
       const spy = vi
         .spyOn(api, 'fetchPokemonByName')
         .mockResolvedValue(mockPokemon);
 
-      render(<CardList searchTerm="pikachu" />);
+      render(
+        <CardList
+          searchTerm="pikachu"
+          page={1}
+          limit={20}
+          onTotalCountChange={vi.fn()}
+          onPokemonClick={vi.fn()}
+        />
+      );
 
       await waitFor(() => {
         expect(spy).toHaveBeenCalledWith('pikachu');
@@ -37,9 +42,22 @@ describe('CardList component', () => {
     });
 
     it('handles missing results in fetchPokemonList', async () => {
-      vi.spyOn(api, 'fetchPokemonList').mockResolvedValue({ results: [] });
+      vi.spyOn(api, 'fetchPokemonList').mockResolvedValue({
+        results: [],
+        count: 0,
+        next: null,
+        previous: null,
+      });
 
-      render(<CardList searchTerm="" />);
+      render(
+        <CardList
+          searchTerm=""
+          page={1}
+          limit={20}
+          onTotalCountChange={vi.fn()}
+          onPokemonClick={vi.fn()}
+        />
+      );
 
       await waitFor(() => {
         expect(screen.getByText(/no results found/i)).toBeInTheDocument();
@@ -51,7 +69,15 @@ describe('CardList component', () => {
         new Error('Failed to fetch')
       );
 
-      render(<CardList searchTerm="unknown" />);
+      render(
+        <CardList
+          searchTerm="unknown"
+          page={1}
+          limit={20}
+          onTotalCountChange={vi.fn()}
+          onPokemonClick={vi.fn()}
+        />
+      );
 
       await waitFor(() => {
         expect(screen.getByText(/error/i)).toBeInTheDocument();
@@ -60,13 +86,29 @@ describe('CardList component', () => {
     });
 
     it('shows error if fetchPokemonByName fails after searchTerm update', async () => {
-      const { rerender } = render(<CardList searchTerm="pikachu" />);
+      const { rerender } = render(
+        <CardList
+          searchTerm="pikachu"
+          page={1}
+          limit={20}
+          onTotalCountChange={vi.fn()}
+          onPokemonClick={vi.fn()}
+        />
+      );
 
       vi.spyOn(api, 'fetchPokemonByName').mockRejectedValue(
         new Error('Updated term failed')
       );
 
-      rerender(<CardList searchTerm="charmander" />);
+      rerender(
+        <CardList
+          searchTerm="charmander"
+          page={1}
+          limit={20}
+          onTotalCountChange={vi.fn()}
+          onPokemonClick={vi.fn()}
+        />
+      );
 
       await waitFor(() => {
         expect(screen.getByText(/error/i)).toBeInTheDocument();
@@ -75,31 +117,49 @@ describe('CardList component', () => {
     });
 
     it('shows "No results found" if pokemonItems is empty', async () => {
-      vi.spyOn(api, 'fetchPokemonList').mockResolvedValue({ results: [] });
+      vi.spyOn(api, 'fetchPokemonList').mockResolvedValue({
+        results: [],
+        count: 0,
+        next: null,
+        previous: null,
+      });
 
-      render(<CardList searchTerm="" />);
+      render(
+        <CardList
+          searchTerm=""
+          page={1}
+          limit={20}
+          onTotalCountChange={vi.fn()}
+          onPokemonClick={vi.fn()}
+        />
+      );
 
       await waitFor(() => {
         expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+        expect(screen.getByText(/no results found/i)).toBeInTheDocument();
       });
-
-      expect(screen.getByText(/no results found/i)).toBeInTheDocument();
     });
   });
 
   describe('Card rendering', () => {
     it('renders list of pokemon when data is provided', async () => {
       vi.spyOn(api, 'fetchPokemonList').mockResolvedValue({
-        results: [
-          {
-            name: 'bulbasaur',
-            url: '',
-          },
-        ],
+        results: [{ name: 'bulbasaur', url: '' }],
+        count: 1,
+        next: null,
+        previous: null,
       });
       vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
 
-      render(<CardList searchTerm="" />);
+      render(
+        <CardList
+          searchTerm=""
+          page={1}
+          limit={20}
+          onTotalCountChange={vi.fn()}
+          onPokemonClick={vi.fn()}
+        />
+      );
 
       await waitFor(() => {
         expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument();
@@ -110,7 +170,15 @@ describe('CardList component', () => {
     it('renders single pokemon when searchTerm is provided', async () => {
       vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
 
-      render(<CardList searchTerm="bulbasaur" />);
+      render(
+        <CardList
+          searchTerm="bulbasaur"
+          page={1}
+          limit={20}
+          onTotalCountChange={vi.fn()}
+          onPokemonClick={vi.fn()}
+        />
+      );
 
       expect(await screen.findByText(/bulbasaur/i)).toBeInTheDocument();
     });

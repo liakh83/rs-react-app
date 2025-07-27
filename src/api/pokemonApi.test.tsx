@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { fetchPokemonList, fetchPokemonByName } from './pokemonApi';
 
 describe('Pokemon API', () => {
@@ -18,7 +19,7 @@ describe('Pokemon API', () => {
       )
     );
 
-    const data = await fetchPokemonList();
+    const data = await fetchPokemonList(0);
     expect(data).toEqual(mockResponse);
   });
 
@@ -28,7 +29,7 @@ describe('Pokemon API', () => {
       vi.fn(() => Promise.resolve({ ok: false, status: 500 }))
     );
 
-    await expect(fetchPokemonList()).rejects.toThrow('Error status: 500');
+    await expect(fetchPokemonList(0)).rejects.toThrow('Error status: 500');
   });
 
   it('fetchPokemonByName returns mapped pokemon on success', async () => {

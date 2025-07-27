@@ -27,6 +27,10 @@
     "baseUrl": "./",
     "paths": {
       "@api/*": ["src/api/*"],
+      "@utils/*": ["src/utils/*"],
+      "@pages/*": ["src/pages/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@router/*": ["src/router/*"],
       "@test-utils/*": ["src/test-utils/*"],
       "@components/*": ["src/components/*"]
     }

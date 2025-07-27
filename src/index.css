@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -36,6 +36,3 @@ button:hover {
   border: 2px solid;
   border-color: #646cff;
 }
-
-
-

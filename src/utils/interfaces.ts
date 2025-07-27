@@ -1,5 +1,11 @@
 export interface PokemonListResponse {
-  results: { name: string; url: string }[];
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: {
+    name: string;
+    url: string;
+  }[];
 }
 
 export interface PokemonAPIResponse {
@@ -23,6 +29,16 @@ export interface PokemonAPIResponse {
     is_hidden: boolean;
     slot: number;
   }[];
+  height: number;
+  weight: number;
+}
+
+export interface Pokemon {
+  id: number;
+  name: string;
+  image: string;
+  types: string[];
+  abilities: string[];
   height: number;
   weight: number;
 }
