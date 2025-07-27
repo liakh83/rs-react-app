@@ -1,5 +1,11 @@
 export interface PokemonListResponse {
-  results: { name: string; url: string }[];
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: {
+    name: string;
+    url: string;
+  }[];
 }
 
 export interface PokemonAPIResponse {

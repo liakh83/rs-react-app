@@ -1,1 +1,4 @@
-export { default } from './PokemonCard';
+import PokemonCard from './PokemonCard';
+import PokemonDetail from './PokemonDetail';
+
+export { PokemonDetail, PokemonCard };
