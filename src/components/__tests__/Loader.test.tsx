@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import CardList from '@components/CardList/CardList';
+import CardList from '@components/CardList';
 
 describe('Render loader', () => {
   it('shows loading spinner initially', () => {

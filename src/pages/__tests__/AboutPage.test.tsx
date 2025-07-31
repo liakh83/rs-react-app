@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect } from 'vitest';
 
-import AboutPage from './AboutPage';
+import AboutPage from '@pages/AboutPage';
 
 describe('AboutPage', () => {
   it('renders AboutPage with content and links', () => {

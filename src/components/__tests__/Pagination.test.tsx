@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
-import Pagination from './Pagination';
+import Pagination from '../Pagination/Pagination';
 
 describe('Pagination', () => {
   it('calls onChangePage with currentPage - 1 when clicking "Previous"', async () => {

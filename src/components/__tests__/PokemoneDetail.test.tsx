@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 
-import PokemonDetail from './PokemonDetail';
+import { PokemonDetail } from '@components/PokemonCard';
 
 const mockPokemon = {
   id: 1,

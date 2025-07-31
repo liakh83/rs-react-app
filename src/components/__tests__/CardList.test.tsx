@@ -2,8 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import * as api from '@api/pokemonApi';
-
-import CardList from './CardList';
+import CardList from '@components/CardList';
 
 const mockPokemon = {
   id: 1,
