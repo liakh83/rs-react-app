@@ -1,30 +1,48 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 
 import CardList from '@components/CardList';
 import Header from '@components/Header';
 import Pagination from '@components/Pagination';
-import { PokemonDetail } from '@components/PokemonCard';
-import useLocalStorageState from '@hooks/useLocalStorageState';
+import { PokemonItem } from '@components/PokemonCard';
+import { useLocalStorageState } from '@hooks/index';
 
 import type { Pokemon } from '@utils/interfaces';
 
-const LIMIT = 30;
+const LIMIT = 12;
 
 const MainPage = () => {
   const [inputValue, setInputValue] = useLocalStorageState('inputValue', '');
   const [searchTerm, setSearchTerm] = useLocalStorageState('searchTerm', '');
   const [totalCount, setTotalCount] = useState(0);
   const [shouldThrow, setShouldThrow] = useState(false);
-  const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const currentPage = Number(searchParams.get('page')) || 1;
   const totalPage = Math.ceil(totalCount / LIMIT);
 
   useEffect(() => {
-    setSelectedPokemon(null);
-  }, [currentPage, searchTerm]);
+    const hasSearch = searchParams.get('search');
+    const hasPage = searchParams.get('page');
+    const hasLocalSearch = searchTerm;
+
+    const newParams = new URLSearchParams(searchParams);
+    let shouldUpdate = false;
+
+    if (!hasSearch && hasLocalSearch) {
+      newParams.set('search', hasLocalSearch);
+      shouldUpdate = true;
+    }
+
+    if (!hasPage && !hasSearch && !hasLocalSearch) {
+      newParams.set('page', '1');
+      shouldUpdate = true;
+    }
+
+    if (shouldUpdate) {
+      setSearchParams(newParams);
+    }
+  }, [searchTerm, setSearchParams, searchParams]);
 
   const handleSearchInput = (value: string) => {
     setInputValue(value);
@@ -33,7 +51,18 @@ const MainPage = () => {
   const handleSearch = () => {
     const trimmedValue = inputValue.trim();
     setSearchTerm(trimmedValue);
-    setSearchParams({ page: '1' });
+
+    const newParams = new URLSearchParams(searchParams);
+
+    if (trimmedValue) {
+      newParams.set('search', trimmedValue);
+      newParams.delete('page');
+    } else {
+      newParams.delete('search');
+      newParams.set('page', '1');
+    }
+
+    setSearchParams(newParams, { replace: true });
   };
 
   const handleChangePage = (newPage: number) => {
@@ -41,13 +70,17 @@ const MainPage = () => {
   };
 
   const handlePokemonClick = (pokemon: Pokemon) => {
-    setSelectedPokemon(pokemon);
-    setSearchParams({ page: currentPage.toString(), details: pokemon.name });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('details', pokemon.name);
+    setSearchParams(newParams);
   };
 
   const handleCloseDetail = () => {
-    setSelectedPokemon(null);
-    setSearchParams({ page: currentPage.toString() });
+    const newParams = new URLSearchParams(searchParams);
+    if (newParams.has('details')) {
+      newParams.delete('details');
+      setSearchParams(newParams);
+    }
   };
 
   const handleError = () => {
@@ -66,20 +99,24 @@ const MainPage = () => {
         onSearchClick={handleSearch}
       />
       <div className="flex">
-        <div className="flex-1 card">
-          <CardList
-            searchTerm={searchTerm}
-            page={currentPage}
-            limit={LIMIT}
-            onTotalCountChange={setTotalCount}
-            onPokemonClick={handlePokemonClick}
-          />
+        <div className="flex-1 card" onClick={handleCloseDetail}>
           {!searchTerm && (
-            <Pagination
-              currentPage={currentPage}
-              totalPage={totalPage}
-              onChangePage={handleChangePage}
-            />
+            <>
+              <CardList
+                page={currentPage}
+                limit={LIMIT}
+                onTotalCountChange={setTotalCount}
+                onPokemonClick={handlePokemonClick}
+              />
+              <Pagination
+                currentPage={currentPage}
+                totalPage={totalPage}
+                onChangePage={handleChangePage}
+              />
+            </>
+          )}
+          {searchTerm && (
+            <PokemonItem name={searchTerm} onClick={handlePokemonClick} />
           )}
           <button
             className="mt-4"
@@ -90,12 +127,7 @@ const MainPage = () => {
             Error Button
           </button>
         </div>
-        {selectedPokemon && (
-          <PokemonDetail
-            pokemon={selectedPokemon}
-            onClose={handleCloseDetail}
-          />
-        )}
+        <Outlet />
       </div>
     </>
   );
