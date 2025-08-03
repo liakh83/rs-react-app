@@ -5,7 +5,7 @@ import type {
 
 export const fetchPokemonList = async (
   offset: number,
-  limit = 30
+  limit = 12
 ): Promise<PokemonListResponse> => {
   const URL = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`;
   const result = await fetch(URL);

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 
-import Header from './Header';
+import Header from '@components/Header';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {

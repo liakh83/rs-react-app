@@ -11,15 +11,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
 button {
   border-radius: 8px;
   border: 1px solid;
@@ -35,4 +26,9 @@ button {
 button:hover {
   border: 2px solid;
   border-color: #646cff;
+}
+
+.card {
+  padding: 2em;
+  gap: 1rem;
 }

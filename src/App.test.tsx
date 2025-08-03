@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { ThemeProvider } from '@components/context';
+import { store } from '@redux/store';
 
 import App from './App';
 
@@ -16,26 +20,50 @@ describe('App Component', () => {
   it('displays previously saved search term from localStorage on mount', () => {
     localStorage.setItem('inputValue', 'Picachu');
 
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    );
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
     expect(input.value).toBe('Picachu');
   });
 
   it('shows empty input when no saved term exists in localStorage', () => {
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    );
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
     expect(input.value).toBe('');
   });
 
   it('render mocked CardList component', () => {
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    );
     expect(screen.getByTestId('mock-CardList')).toBeInTheDocument();
   });
 
   it('save trimmed input to localStorage on search', async () => {
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    );
 
     const input = screen.getByRole('textbox');
     const button = screen.getByRole('button', { name: /search/i });
@@ -48,7 +76,13 @@ describe('App Component', () => {
   });
 
   it('updates localStorage with new search term', async () => {
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    );
 
     const input = screen.getByRole('textbox');
     const button = screen.getByRole('button', { name: /search/i });
@@ -64,7 +98,13 @@ describe('App Component', () => {
   it('overwrites old value with new search', async () => {
     localStorage.setItem('searchTerm', 'oldTerm');
 
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    );
 
     const input = screen.getByRole('textbox');
     const button = screen.getByRole('button', { name: /search/i });
