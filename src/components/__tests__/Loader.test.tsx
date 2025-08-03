@@ -7,7 +7,6 @@ describe('Render loader', () => {
   it('shows loading spinner initially', () => {
     render(
       <CardList
-        searchTerm=""
         page={1}
         limit={30}
         onTotalCountChange={vi.fn()}
