@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 
 import CardList from '@components/CardList';
+import FlyoutElement from '@components/FlyoutElement';
 import Header from '@components/Header';
 import Pagination from '@components/Pagination';
 import { PokemonItem } from '@components/PokemonCard';
@@ -126,6 +127,7 @@ const MainPage = () => {
           >
             Error Button
           </button>
+          <FlyoutElement />
         </div>
         <Outlet />
       </div>
