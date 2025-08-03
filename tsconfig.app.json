@@ -32,7 +32,8 @@
       "@hooks/*": ["src/hooks/*"],
       "@router/*": ["src/router/*"],
       "@test-utils/*": ["src/test-utils/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@redux/*": ["src/redux/*"]
     }
   },
   "include": ["src"]
