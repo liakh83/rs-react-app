@@ -10,7 +10,7 @@ const PokemonCard = ({ pokemon, onClick }: Props) => {
     <div
       key={pokemon.id}
       onClick={() => onClick?.(pokemon)}
-      className="border rounded shadow p-4 bg-white hover:shadow-lg transition cursor-pointer"
+      className="border border-gray-300 dark:border-gray-700 rounded shadow p-4 bg-white dark:bg-gray-700 text-black dark:text-white hover:shadow-lg transition cursor-pointer"
     >
       <h2 className="text-lg font-bold capitalize mb-2">{pokemon.name}</h2>
       <img

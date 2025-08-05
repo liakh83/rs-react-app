@@ -65,7 +65,7 @@ const FlyoutElement = () => {
   };
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-white border shadow-xl rounded-lg px-6 py-4 flex items-center gap-4">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-gray-800 border dark:border-gray-600 shadow-xl rounded-lg px-6 py-4 flex items-center gap-4 text-black dark:text-white">
       <span className="font-semibold">Selected: {selectedCount}</span>
       <button
         onClick={handleClear}
