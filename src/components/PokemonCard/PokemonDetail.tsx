@@ -1,15 +1,24 @@
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useSearchParams } from 'react-router-dom';
 
+import { useGetPokemonByNameQuery } from '@api/pokemonApi';
 import Loader from '@components/Loader';
-import usePokemonByName from '@hooks/usePokemonByName';
+import getErrorMessage from '@services/errorHelper';
 
 import PokemonCard from './PokemonCard';
 
 const PokemonDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const namePokemon = searchParams.get('details');
+  const pokemonName = searchParams.get('details');
 
-  const { pokemon, isLoading, error } = usePokemonByName(namePokemon || '');
+  const {
+    data: pokemon,
+    isFetching,
+    error,
+    isError,
+  } = useGetPokemonByNameQuery(pokemonName ?? skipToken);
+
+  if (!pokemonName) return null;
 
   const handleCloseDetail = () => {
     const newParams = new URLSearchParams(searchParams);
@@ -18,12 +27,17 @@ const PokemonDetail = () => {
     setSearchParams(newParams);
   };
 
-  if (isLoading) return <Loader />;
-  if (error || !pokemon) return null;
+  if (isFetching) {
+    return <Loader />;
+  }
+
+  if (isError && error) {
+    return <div className="text-red-500">{getErrorMessage(error)}</div>;
+  }
 
   return (
     <div className="p-4w-full border-l max-w-md">
-      <PokemonCard pokemon={pokemon} />
+      {pokemon && <PokemonCard pokemon={pokemon} />}
       <button
         className="mb-4 px-4 py-2 bg-red-500 text-white rounded"
         onClick={handleCloseDetail}

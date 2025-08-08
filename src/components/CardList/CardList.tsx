@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 
+import { useGetPokemonListQuery } from '@api/pokemonApi';
 import Loader from '@components/Loader';
 import { PokemonItem } from '@components/PokemonCard';
-import { usePokemonList } from '@hooks/index';
+import getErrorMessage from '@services/errorHelper';
 
 import type { Pokemon } from '@utils/interfaces';
 
@@ -21,30 +22,35 @@ const CardList = ({
 }: Props) => {
   const offset = (page - 1) * limit;
 
-  const { pokemonNames, isLoading, error, totalCount } = usePokemonList(
+  const {
+    data = { totalCount: 0, pokemonNames: [] },
+    isFetching,
+    error,
+    isError,
+  } = useGetPokemonListQuery({
     offset,
-    limit
-  );
+    limit,
+  });
 
   useEffect(() => {
-    onTotalCountChange(totalCount);
-  }, [totalCount, onTotalCountChange]);
+    onTotalCountChange(data.totalCount);
+  }, [data.totalCount, onTotalCountChange]);
 
-  if (isLoading) {
+  if (isFetching) {
     return <Loader />;
   }
 
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
+  if (isError && error) {
+    return <div className="text-red-500">{getErrorMessage(error)}</div>;
   }
 
-  if (!isLoading && !error && pokemonNames.length === 0) {
+  if (!isFetching && !error && data?.pokemonNames.length === 0) {
     return <div className="text-red-500">No results found</div>;
   }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-      {pokemonNames.map((name) => (
+      {data.pokemonNames.map((name) => (
         <PokemonItem name={name} key={name} onClick={onPokemonClick} />
       ))}
     </div>
