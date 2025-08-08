@@ -8,6 +8,11 @@ export interface PokemonListResponse {
   }[];
 }
 
+export interface resultPokemonList {
+  pokemonNames: string[];
+  totalCount: number;
+}
+
 export interface PokemonAPIResponse {
   id: number;
   name: string;

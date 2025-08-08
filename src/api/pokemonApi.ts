@@ -1,31 +1,45 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+import { LIMIT_ITEMS } from '@utils/constants';
+
 import type {
+  Pokemon,
   PokemonAPIResponse,
   PokemonListResponse,
+  resultPokemonList,
 } from '@utils/interfaces';
 
-export const fetchPokemonList = async (
-  offset: number,
-  limit = 12
-): Promise<PokemonListResponse> => {
-  const URL = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`;
-  const result = await fetch(URL);
-  if (!result.ok) throw new Error(`Error status: ${result.status}`);
-  return result.json();
-};
+export const pokemonApi = createApi({
+  reducerPath: 'pokemonApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+  endpoints: (builder) => ({
+    getPokemonList: builder.query<
+      resultPokemonList,
+      { offset: number; limit?: number }
+    >({
+      query: ({ offset, limit = LIMIT_ITEMS }) =>
+        `pokemon?offset=${offset}&limit=${limit}`,
+      transformResponse: (
+        response: PokemonListResponse
+      ): resultPokemonList => ({
+        pokemonNames: response.results.map((pokemon) => pokemon.name),
+        totalCount: response.count,
+      }),
+    }),
 
-export const fetchPokemonByName = async (name: string) => {
-  const result = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-  if (!result.ok)
-    throw new Error(`Pokemon "${name}" not found . Status: ${result.status}`);
-  const data: PokemonAPIResponse = await result.json();
+    getPokemonByName: builder.query<Pokemon, string>({
+      query: (name) => `pokemon/${name}`,
+      transformResponse: (response: PokemonAPIResponse): Pokemon => ({
+        id: response.id,
+        name: response.name,
+        image: response.sprites.front_default,
+        types: response.types.map((value) => value.type.name),
+        abilities: response.abilities.map((value) => value.ability.name),
+        height: response.height / 10,
+        weight: response.weight / 10,
+      }),
+    }),
+  }),
+});
 
-  return {
-    id: data.id,
-    name: data.name,
-    image: data.sprites.front_default,
-    types: data.types.map((value) => value.type.name),
-    abilities: data.abilities.map((value) => value.ability.name),
-    height: data.height / 10,
-    weight: data.weight / 10,
-  };
-};
+export const { useGetPokemonListQuery, useGetPokemonByNameQuery } = pokemonApi;
