@@ -33,6 +33,7 @@
       "@router/*": ["src/router/*"],
       "@test-utils/*": ["src/test-utils/*"],
       "@components/*": ["src/components/*"],
+      "@services/*": ["src/services/*"],
       "@redux/*": ["src/redux/*"]
     }
   },

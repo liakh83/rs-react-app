@@ -44,7 +44,7 @@ const PokemonItem = ({
   }
 
   return (
-    <div className="relative">
+    <div className="relative w-full max-w-md mx-auto">
       <input
         type="checkbox"
         checked={isSelected}

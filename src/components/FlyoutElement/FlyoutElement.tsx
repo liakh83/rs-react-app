@@ -3,9 +3,7 @@ import { clearItems } from '@redux/selectedItemsSlice';
 
 const FlyoutElement = () => {
   const dispatch = useAppDispatch();
-  const selectedItems = useAppSelector(
-    (state) => state.selectedItems.selectedItems
-  );
+  const selectedItems = useAppSelector((state) => state.selected.selectedItems);
   const selectedCount = Object.keys(selectedItems).length;
 
   if (selectedCount === 0) return null;

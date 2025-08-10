@@ -36,10 +36,10 @@ const PokemonDetail = () => {
   }
 
   return (
-    <div className="p-4w-full border-l max-w-md">
+    <div className="p-4 w-full max-w-md">
       {pokemon && <PokemonCard pokemon={pokemon} />}
       <button
-        className="mb-4 px-4 py-2 bg-red-500 text-white rounded"
+        className="mb-4 mt-2  px-4 py-2 bg-red-500 text-white rounded"
         onClick={handleCloseDetail}
       >
         Close
