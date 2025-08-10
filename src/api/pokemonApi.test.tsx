@@ -1,38 +1,50 @@
+import { configureStore } from '@reduxjs/toolkit';
+import { renderHook, waitFor } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { fetchPokemonList, fetchPokemonByName } from './pokemonApi';
+import { pokemonApi } from './pokemonApi';
 
-describe('Pokemon API', () => {
+const mockStore = configureStore({
+  reducer: {
+    [pokemonApi.reducerPath]: pokemonApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(pokemonApi.middleware),
+});
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <Provider store={mockStore}>{children}</Provider>
+);
+
+describe('Pokemon API RTK Query', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('fetchPokemonList returns data on success', async () => {
-    const mockResponse = { results: [{ name: 'bulbasaur' }] };
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(() =>
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(mockResponse),
-        })
-      )
+  it('getPokemonList returns data on success', async () => {
+    const mockResponse = { results: [{ name: 'bulbasaur' }], count: 1 };
+
+    vi.spyOn(window, 'fetch').mockResolvedValueOnce(
+      new Response(JSON.stringify(mockResponse), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
     );
 
-    const data = await fetchPokemonList(0);
-    expect(data).toEqual(mockResponse);
-  });
-
-  it('fetchPokemonList throws error on failure', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(() => Promise.resolve({ ok: false, status: 500 }))
+    const { result } = renderHook(
+      () => pokemonApi.useGetPokemonListQuery({ offset: 0 }),
+      { wrapper }
     );
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    await expect(fetchPokemonList(0)).rejects.toThrow('Error status: 500');
+    expect(result.current.data).toEqual({
+      pokemonNames: ['bulbasaur'],
+      totalCount: 1,
+    });
   });
 
-  it('fetchPokemonByName returns mapped pokemon on success', async () => {
+  it('getPokemonByName returns mapped pokemon on success', async () => {
     const apiResponse = {
       id: 1,
       name: 'bulbasaur',
@@ -42,18 +54,21 @@ describe('Pokemon API', () => {
       height: 7,
       weight: 69,
     };
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(() =>
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(apiResponse),
-        })
-      )
+
+    vi.spyOn(window, 'fetch').mockResolvedValueOnce(
+      new Response(JSON.stringify(apiResponse), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
     );
 
-    const pokemon = await fetchPokemonByName('bulbasaur');
-    expect(pokemon).toEqual({
+    const { result } = renderHook(
+      () => pokemonApi.useGetPokemonByNameQuery('bulbasaur'),
+      { wrapper }
+    );
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(result.current.data).toEqual({
       id: 1,
       name: 'bulbasaur',
       image: 'image_url',
@@ -64,14 +79,23 @@ describe('Pokemon API', () => {
     });
   });
 
-  it('fetchPokemonByName throws error on failure', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(() => Promise.resolve({ ok: false, status: 404 }))
+  it('getPokemonByName throws error on failure', async () => {
+    vi.spyOn(window, 'fetch').mockResolvedValueOnce(
+      new Response(null, {
+        status: 404,
+        statusText: 'Not Found',
+      })
     );
 
-    await expect(fetchPokemonByName('unknown')).rejects.toThrow(
-      'Pokemon "unknown" not found . Status: 404'
+    const { result } = renderHook(
+      () => pokemonApi.useGetPokemonByNameQuery('unknown'),
+      { wrapper }
     );
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    expect(result.current.error).toEqual({
+      status: 404,
+      data: null,
+    });
   });
 });

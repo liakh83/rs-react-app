@@ -1,7 +1,6 @@
 interface PaginationProps {
   currentPage: number;
   totalPage: number;
-
   onChangePage: (newPage: number) => void;
 }
 

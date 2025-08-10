@@ -1,7 +1,9 @@
-import { useTheme } from './theme-context';
+import { useContext } from 'react';
+
+import { ThemeContext } from './ThemeContext';
 
 const ThemeToggle = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <div className="flex items-center gap-2">

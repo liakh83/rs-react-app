@@ -14,7 +14,7 @@ describe('FlyoutElement', () => {
 
   beforeEach(() => {
     store = mockStore({
-      selectedItems: {
+      selected: {
         selectedItems: {
           charmander: {
             name: 'charmander',
@@ -46,7 +46,7 @@ describe('FlyoutElement', () => {
 
   it('does not render if no items selected', () => {
     const emptyStore = mockStore({
-      selectedItems: {
+      selected: {
         selectedItems: {},
       },
     });

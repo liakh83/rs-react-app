@@ -18,6 +18,7 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, 'src/pages'),
       '@router': path.resolve(__dirname, 'src/router'),
       '@redux': path.resolve(__dirname, 'src/redux'),
+      '@services': path.resolve(__dirname, 'src/services'),
     },
   },
   test: {
