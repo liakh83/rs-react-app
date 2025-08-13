@@ -11,7 +11,7 @@ import { useAppDispatch, useLocalStorageState } from '@hooks/index';
 import { useAppSelector } from '@hooks/index';
 import { LIMIT_ITEMS } from '@utils/constants';
 
-import type { Pokemon } from '@utils/interfaces';
+import type { Pokemon } from 'src/types/pokemon';
 
 const MainPage = () => {
   const [inputValue, setInputValue] = useLocalStorageState('inputValue', '');
@@ -189,12 +189,7 @@ const MainPage = () => {
           {searchTerm && (
             <PokemonItem name={searchTerm} onClick={handlePokemonClick} />
           )}
-          <button
-            className="mt-4"
-            onClick={() => {
-              handleError();
-            }}
-          >
+          <button className="mt-4" onClick={handleError}>
             Error Button
           </button>
           <FlyoutElement />

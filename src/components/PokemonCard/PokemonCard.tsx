@@ -1,4 +1,4 @@
-import type { Pokemon } from '@utils/interfaces';
+import type { Pokemon } from 'src/types/pokemon';
 
 export interface Props {
   pokemon: Pokemon;

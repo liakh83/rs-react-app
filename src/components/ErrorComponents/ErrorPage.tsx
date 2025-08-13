@@ -16,7 +16,6 @@ const ErrorPage = () => {
   return (
     <>
       <h2>Unexpected Application Error</h2>
-
       {error instanceof Error ? (
         <p>{error?.message}</p>
       ) : (

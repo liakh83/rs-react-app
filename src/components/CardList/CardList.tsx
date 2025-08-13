@@ -5,7 +5,7 @@ import Loader from '@components/Loader';
 import { PokemonItem } from '@components/PokemonCard';
 import getErrorMessage from '@services/errorHelper';
 
-import type { Pokemon } from '@utils/interfaces';
+import type { Pokemon } from 'src/types/pokemon';
 
 interface Props {
   page: number;

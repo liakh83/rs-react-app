@@ -6,7 +6,7 @@ import {
   default as reducer,
 } from '@redux/selectedItemsSlice';
 
-import type { Pokemon } from '@utils/interfaces';
+import type { Pokemon } from 'src/types/pokemon';
 
 const mockPokemon: Pokemon = {
   id: 1,

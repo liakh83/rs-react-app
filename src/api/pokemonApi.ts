@@ -3,11 +3,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { LIMIT_ITEMS } from '@utils/constants';
 
 import type {
-  Pokemon,
   PokemonAPIResponse,
   PokemonListResponse,
   resultPokemonList,
-} from '@utils/interfaces';
+} from './pokemonApi.types';
+import type { Pokemon } from 'src/types/pokemon';
 
 export const pokemonApi = createApi({
   reducerPath: 'pokemonApi',

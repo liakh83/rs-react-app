@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import { ThemeToggle } from '@components/context';
+import { ThemeToggle } from '@components/Theme';
 
 const MainLayout = () => {
   return (

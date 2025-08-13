@@ -8,7 +8,7 @@ import getErrorMessage from '@services/errorHelper';
 
 import PokemonCard from './PokemonCard';
 
-import type { Pokemon } from '@utils/interfaces';
+import type { Pokemon } from 'src/types/pokemon';
 
 const PokemonItem = ({
   name,
