@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 
-import { ThemeProvider } from '@components/context';
+import { ThemeProvider } from '@components/Theme';
 import { store } from '@redux/store';
 import './index.css';
 

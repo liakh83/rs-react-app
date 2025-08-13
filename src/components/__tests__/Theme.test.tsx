@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import ThemeProvider from '@components/context/ThemeProvider';
-import ThemeToggle from '@components/context/ThemeToggle';
+import ThemeProvider from '@components/Theme/ThemeProvider';
+import ThemeToggle from '@components/Theme/ThemeToggle';
 
 const localStorageMock = (() => {
   let store: Record<string, string> = {};

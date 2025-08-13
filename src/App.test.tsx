@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ThemeProvider } from '@components/context';
+import { ThemeProvider } from '@components/Theme';
 import { store } from '@redux/store';
 
 import App from './App';
