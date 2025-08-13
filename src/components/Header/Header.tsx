@@ -1,3 +1,4 @@
+import { useCallback, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -9,15 +10,18 @@ interface Props {
 const Header = ({ inputValue, onSearchInput, onSearchClick }: Props) => {
   const navigate = useNavigate();
 
-  const handleGoToAbout = () => {
+  const handleGoToAbout = useCallback(() => {
     navigate('/about');
-  };
+  }, [navigate]);
+
+  const handleSearchChangeInput = (event: ChangeEvent<HTMLInputElement>) =>
+    onSearchInput(event.target.value);
 
   return (
     <header className="flex items-center justify-center gap-4 p-4">
       <input
         value={inputValue}
-        onChange={(e) => onSearchInput(e.target.value)}
+        onChange={handleSearchChangeInput}
         placeholder="input name pokemon"
         type="text"
         className="border rounded px-4 py-2 focus:outline-none focus:ring-2"
