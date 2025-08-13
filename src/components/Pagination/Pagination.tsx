@@ -10,11 +10,15 @@ const Pagination = ({
   onChangePage,
 }: PaginationProps) => {
   const handlePrevious = () => {
-    if (currentPage > 1) onChangePage(currentPage - 1);
+    if (currentPage > 1) {
+      onChangePage(currentPage - 1);
+    }
   };
 
   const handleNext = () => {
-    if (currentPage < totalPage) onChangePage(currentPage + 1);
+    if (currentPage < totalPage) {
+      onChangePage(currentPage + 1);
+    }
   };
 
   return (
