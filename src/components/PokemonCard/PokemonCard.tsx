@@ -1,3 +1,4 @@
+'use client';
 import type { Pokemon } from 'src/types/pokemon';
 
 export interface Props {

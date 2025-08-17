@@ -1,7 +1,15 @@
-import { useState } from 'react';
+'use client';
+import { useEffect, useState } from 'react';
 
 const useLocalStorageState = (key: string, initialValue: string) => {
-  const [value, setValue] = useState(localStorage.getItem(key) ?? initialValue);
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    const storedValue = localStorage.getItem(key);
+    if (storedValue !== null) {
+      setValue(storedValue);
+    }
+  }, [key]);
 
   const setStorageValue = (newValue: string) => {
     setValue(newValue);

@@ -1,3 +1,4 @@
+'use client';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import type { Pokemon } from 'src/types/pokemon';

@@ -1,22 +1,11 @@
-import { skipToken } from '@reduxjs/toolkit/query';
+'use client';
 import { useSearchParams } from 'react-router-dom';
-
-import { useGetPokemonByNameQuery } from '@api/pokemonApi';
-import Loader from '@components/Loader';
-import getErrorMessage from '@services/errorHelper';
 
 import PokemonCard from './PokemonCard';
 
 const PokemonDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const pokemonName = searchParams.get('details');
-
-  const {
-    data: pokemon,
-    isFetching,
-    error,
-    isError,
-  } = useGetPokemonByNameQuery(pokemonName ?? skipToken);
 
   if (!pokemonName) return null;
 
@@ -26,14 +15,6 @@ const PokemonDetail = () => {
     newParams.delete('details');
     setSearchParams(newParams);
   };
-
-  if (isFetching) {
-    return <Loader />;
-  }
-
-  if (isError && error) {
-    return <div className="text-red-500">{getErrorMessage(error)}</div>;
-  }
 
   return (
     <div className="p-4 w-full max-w-md">

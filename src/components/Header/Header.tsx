@@ -1,5 +1,6 @@
-import { useCallback, type ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+'use client';
+import Link from 'next/link';
+import { type ChangeEvent } from 'react';
 
 interface Props {
   inputValue: string;
@@ -8,12 +9,6 @@ interface Props {
 }
 
 const Header = ({ inputValue, onSearchInput, onSearchClick }: Props) => {
-  const navigate = useNavigate();
-
-  const handleGoToAbout = useCallback(() => {
-    navigate('/about');
-  }, [navigate]);
-
   const handleSearchChangeInput = (event: ChangeEvent<HTMLInputElement>) =>
     onSearchInput(event.target.value);
 
@@ -29,7 +24,7 @@ const Header = ({ inputValue, onSearchInput, onSearchClick }: Props) => {
       <button onClick={onSearchClick} aria-label="Search for Pokemon">
         search
       </button>
-      <button onClick={handleGoToAbout}>About</button>
+      <Link href="/about">About</Link>
     </header>
   );
 };

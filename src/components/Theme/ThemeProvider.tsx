@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 
 import { ThemeContext } from './ThemeContext';
@@ -6,12 +8,14 @@ type Theme = 'light' | 'dark';
 type Props = { children: React.ReactNode };
 
 const ThemeProvider = ({ children }: Props) => {
-  const getInitialTheme = (): Theme => {
-    const stored = localStorage.getItem('theme');
-    return stored === 'dark' ? 'dark' : 'light';
-  };
+  const [theme, setTheme] = useState<Theme>('light');
 
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  useEffect(() => {
+    const stored = localStorage.getItem('theme');
+    if (stored === 'dark' || stored === 'light') {
+      setTheme(stored);
+    }
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
