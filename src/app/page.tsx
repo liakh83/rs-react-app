@@ -59,9 +59,16 @@ const Page = async ({ searchParams }: Props) => {
   const params = await searchParams;
   const currentPage = Number(params.page) || 1;
   const searchName = typeof params.search === 'string' ? params.search : '';
+  const detailsPokemonName =
+    typeof params.details === 'string' ? params.details : '';
 
   let pokemonData: Pokemon[] = [];
   let totalCount = 0;
+  let selectedPokemon: Pokemon | null = null;
+
+  if (detailsPokemonName) {
+    selectedPokemon = await getPokemonByName(detailsPokemonName);
+  }
 
   if (params.search && params.page) {
     redirect(`/?search=${searchName}`);
@@ -80,7 +87,13 @@ const Page = async ({ searchParams }: Props) => {
     totalCount = data.totalCount;
   }
 
-  return <MainComponent pokemonData={pokemonData} totalCount={totalCount} />;
+  return (
+    <MainComponent
+      pokemonData={pokemonData}
+      totalCount={totalCount}
+      selectedPokemon={selectedPokemon}
+    />
+  );
 };
 
 export default Page;

@@ -1,19 +1,27 @@
 'use client';
-import { useSearchParams } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import PokemonCard from './PokemonCard';
 
-const PokemonDetail = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+import type { Pokemon } from 'src/types/pokemon';
+
+interface Props {
+  pokemon: Pokemon;
+}
+
+const PokemonDetail = ({ pokemon }: Props) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const pokemonName = searchParams.get('details');
 
-  if (!pokemonName) return null;
+  if (!pokemonName) {
+    return null;
+  }
 
   const handleCloseDetail = () => {
-    const newParams = new URLSearchParams(searchParams);
-
+    const newParams = new URLSearchParams(searchParams.toString());
     newParams.delete('details');
-    setSearchParams(newParams);
+    router.push(`/?${newParams.toString()}`);
   };
 
   return (

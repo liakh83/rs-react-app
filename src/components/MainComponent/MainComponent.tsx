@@ -7,6 +7,7 @@ import FlyoutElement from '@components/FlyoutElement/FlyoutElement';
 import Header from '@components/Header';
 import Pagination from '@components/Pagination';
 import { PokemonItem } from '@components/PokemonCard';
+import PokemonDetail from '@components/PokemonCard/PokemonDetail';
 import useLocalStorageState from '@hooks/useLocalStorageState';
 import { LIMIT_ITEMS } from '@utils/constants';
 
@@ -15,9 +16,10 @@ import type { Pokemon } from 'src/types/pokemon';
 interface Props {
   totalCount: number;
   pokemonData: Pokemon[];
+  selectedPokemon?: Pokemon | null;
 }
 
-const MainComponent = ({ pokemonData, totalCount }: Props) => {
+const MainComponent = ({ pokemonData, totalCount, selectedPokemon }: Props) => {
   const [inputValue, setInputValue] = useLocalStorageState('inputValue', '');
   const [searchTerm, setSearchTerm] = useLocalStorageState('searchTerm', '');
   const [shouldThrow, setShouldThrow] = useState(false);
@@ -116,6 +118,7 @@ const MainComponent = ({ pokemonData, totalCount }: Props) => {
               onClick={handlePokemonClick}
             />
           )}
+          {selectedPokemon && <PokemonDetail pokemon={selectedPokemon} />}
           <button className="mt-4" onClick={handleError}>
             Error Button
           </button>
