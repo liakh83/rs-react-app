@@ -1,4 +1,6 @@
-import { useAppDispatch, useAppSelector } from '@hooks/index';
+'use client';
+import useAppDispatch from '@hooks/useAppDispatch';
+import useAppSelector from '@hooks/useAppSelector';
 import { clearItems } from '@redux/selectedItemsSlice';
 
 const FlyoutElement = () => {

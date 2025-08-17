@@ -1,32 +1,21 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-
-import { useGetPokemonByNameQuery } from '@api/pokemonApi';
-import Loader from '@components/Loader';
-import { useAppDispatch, useAppSelector } from '@hooks/index';
+'use client';
+import useAppDispatch from '@hooks/useAppDispatch';
+import useAppSelector from '@hooks/useAppSelector';
 import { toggleItem } from '@redux/selectedItemsSlice';
-import getErrorMessage from '@services/errorHelper';
 
 import PokemonCard from './PokemonCard';
 
-import type { Pokemon } from '@utils/interfaces';
+import type { Pokemon } from 'src/types/pokemon';
 
-const PokemonItem = ({
-  name,
-  onClick,
-}: {
-  name: string;
+interface Props {
+  pokemon: Pokemon;
   onClick?: (pokemon: Pokemon) => void;
-}) => {
-  const {
-    data: pokemon,
-    isFetching,
-    error,
-    isError,
-  } = useGetPokemonByNameQuery(name ?? skipToken);
+}
 
+const PokemonItem = ({ pokemon, onClick }: Props) => {
   const dispatch = useAppDispatch();
   const isSelected = useAppSelector(
-    (state) => !!state.selected.selectedItems[name]
+    (state) => !!state.selected.selectedItems[pokemon.name]
   );
 
   const handleCheckboxChange = () => {
@@ -34,14 +23,6 @@ const PokemonItem = ({
       dispatch(toggleItem(pokemon));
     }
   };
-
-  if (isFetching) {
-    return <Loader />;
-  }
-
-  if (error && isError) {
-    return <div className="text-red-500">{getErrorMessage(error)}</div>;
-  }
 
   return (
     <div className="relative w-full max-w-md mx-auto">

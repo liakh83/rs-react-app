@@ -1,39 +1,28 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useSearchParams } from 'react-router-dom';
-
-import { useGetPokemonByNameQuery } from '@api/pokemonApi';
-import Loader from '@components/Loader';
-import getErrorMessage from '@services/errorHelper';
+'use client';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import PokemonCard from './PokemonCard';
 
-const PokemonDetail = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+import type { Pokemon } from 'src/types/pokemon';
+
+interface Props {
+  pokemon: Pokemon;
+}
+
+const PokemonDetail = ({ pokemon }: Props) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const pokemonName = searchParams.get('details');
 
-  const {
-    data: pokemon,
-    isFetching,
-    error,
-    isError,
-  } = useGetPokemonByNameQuery(pokemonName ?? skipToken);
-
-  if (!pokemonName) return null;
+  if (!pokemonName) {
+    return null;
+  }
 
   const handleCloseDetail = () => {
-    const newParams = new URLSearchParams(searchParams);
-
+    const newParams = new URLSearchParams(searchParams.toString());
     newParams.delete('details');
-    setSearchParams(newParams);
+    router.push(`/?${newParams.toString()}`);
   };
-
-  if (isFetching) {
-    return <Loader />;
-  }
-
-  if (isError && error) {
-    return <div className="text-red-500">{getErrorMessage(error)}</div>;
-  }
 
   return (
     <div className="p-4 w-full max-w-md">
